@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium To-Do List Application</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tasks"></i>
+                    <h1>Task Master</h1>
+                </div>
+                <p class="tagline">Organize, Prioritize, Achieve</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Categories</h3>
+                    <div class="category-list">
+                        <button class="category-btn active" data-category="all">
+                            <i class="fas fa-inbox"></i>
+                            <span>All Tasks</span>
+                            <span class="count" id="count-all">0</span>
+                        </button>
+                        <button class="category-btn" data-category="today">
+                            <i class="fas fa-calendar-day"></i>
+                            <span>Today</span>
+                            <span class="count" id="count-today">0</span>
+                        </button>
+                        <button class="category-btn" data-category="important">
+                            <i class="fas fa-star"></i>
+                            <span>Important</span>
+                            <span class="count" id="count-important">0</span>
+                        </button>
+                        <button class="category-btn" data-category="completed">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Completed</span>
+                            <span class="count" id="count-completed">0</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Priority Levels</h3>
+                    <div class="priority-filter">
+                        <label class="filter-label">
+                            <input type="checkbox" class="priority-checkbox" value="high" checked>
+                            <span class="priority-indicator high"></span>
+                            <span>High</span>
+                        </label>
+                        <label class="filter-label">
+                            <input type="checkbox" class="priority-checkbox" value="medium" checked>
+                            <span class="priority-indicator medium"></span>
+                            <span>Medium</span>
+                        </label>
+                        <label class="filter-label">
+                            <input type="checkbox" class="priority-checkbox" value="low" checked>
+                            <span class="priority-indicator low"></span>
+                            <span>Low</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Actions</h3>
+                    <button class="action-btn" id="export-btn">
+                        <i class="fas fa-download"></i>
+                        <span>Export Tasks</span>
+                    </button>
+                    <button class="action-btn" id="import-btn">
+                        <i class="fas fa-upload"></i>
+                        <span>Import Tasks</span>
+                    </button>
+                    <button class="action-btn danger" id="clear-btn">
+                        <i class="fas fa-trash"></i>
+                        <span>Clear All</span>
+                    </button>
+                </div>
+
+                <div class="sidebar-footer">
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Tasks</span>
+                            <span class="stat-value" id="total-tasks">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Completed</span>
+                            <span class="stat-value" id="completed-tasks">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Progress</span>
+                            <span class="stat-value" id="progress-percent">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Area -->
+            <main class="main-area">
+                <!-- Search and Sort -->
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search tasks..." class="search-input">
+                        <button class="clear-search-btn" id="clear-search-btn" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="sort-box">
+                        <label for="sort-select">Sort by:</label>
+                        <select id="sort-select" class="sort-select">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="priority">Priority</option>
+                            <option value="name-asc">Name (A-Z)</option>
+                            <option value="name-desc">Name (Z-A)</option>
+                            <option value="due-date">Due Date</option>
+                        </select>
+                    </div>
+
+                    <div class="view-options">
+                        <button class="view-btn active" data-view="list" title="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                        <button class="view-btn" data-view="grid" title="Grid View">
+                            <i class="fas fa-th"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add New Task -->
+                <div class="add-task-section">
+                    <form id="add-task-form" class="add-task-form">
+                        <div class="form-input-group">
+                            <input 
+                                type="text" 
+                                id="task-input" 
+                                placeholder="What needs to be done today?" 
+                                class="task-input" 
+                                required
+                            >
+                            <button type="button" class="btn-expand" id="expand-btn" title="More Options">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+
+                        <!-- Extended Options (Hidden by default) -->
+                        <div class="extended-options" id="extended-options" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Priority:</label>
+                                    <div class="priority-buttons">
+                                        <button type="button" class="priority-btn" data-priority="low">
+                                            <span class="priority-dot low"></span> Low
+                                        </button>
+                                        <button type="button" class="priority-btn active" data-priority="medium">
+                                            <span class="priority-dot medium"></span> Medium
+                                        </button>
+                                        <button type="button" class="priority-btn" data-priority="high">
+                                            <span class="priority-dot high"></span> High
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="task-category">Category:</label>
+                                    <input type="text" id="task-category" placeholder="Work, Personal, etc." class="category-input">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="task-due-date">Due Date:</label>
+                                    <input type="date" id="task-due-date" class="due-date-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="task-time">Time:</label>
+                                    <input type="time" id="task-time" class="time-input">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label for="task-description">Description (optional):</label>
+                                    <textarea id="task-description" placeholder="Add details..." class="description-input"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="task-tags">Tags (comma-separated):</label>
+                                    <input type="text" id="task-tags" placeholder="e.g., urgent, meeting, follow-up" class="tags-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Task</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="cancel-btn" style="display: none;">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tasks Container -->
+                <div class="tasks-container">
+                    <div id="tasks-list" class="tasks-list"></div>
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3>No tasks yet</h3>
+                        <p>Add a new task to get started</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Task Detail Modal -->
+    <div id="task-detail-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Task Details</h2>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="import-file" style="display: none;" accept=".json">
+
+    <script src="app.js"></script>
+</body>
+</html>
